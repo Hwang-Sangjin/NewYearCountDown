@@ -1,76 +1,68 @@
 import './App.css';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef} from "react";
+
+let currentTime
+let newYear
+let newYearDate
+let curTimeSec
+let newYearTimeSec
 
 function App() {  
-  var currentTime = new Date();
 
-  var newYear = currentTime.getUTCFullYear()+1;
-  var newYearDate = new Date(newYear, 0,1)
+  useEffect(()=>{
+    currentTime = new Date()
+    newYear = currentTime.getUTCFullYear()+1
+    newYearDate =  new Date(newYear, 0,1)
+    newYearTimeSec = parseInt(newYearDate.getTime()/1000)
+    curTimeSec = parseInt(currentTime.getTime()/1000)
+  },[])
 
-  var currentTimeSec = parseInt(currentTime.getTime()/1000);
-  var newYearTimeSec = parseInt(newYearDate.getTime()/1000);
+  const [totalCnt,setTotal] = useState(parseInt(new Date(new Date().getUTCFullYear()+1,0,1).getTime()/1000) - parseInt(new Date().getTime()/1000))
+  const [Days, setDays] = useState(Math.floor(totalCnt/(60*60*24)))
+  const[Hours,setHours] = useState(Math.floor((totalCnt % (60 * 60 * 24)) / (60 * 60)))
+  const[Mins,setMins] = useState(Math.floor((totalCnt % (60 * 60 )) / (60)))
+  const[Secs,setSecs] = useState(Math.floor((totalCnt % (60 ))))
 
+  // 시간 경과 체크를 위한 useEffect
+  useEffect(() => {
+      const tick = setTimeout(() => {
+        setTotal(totalCnt - 1);
+        setDays(Math.floor(totalCnt/(60*60*24)))
+        setHours(Math.floor((totalCnt % (60 * 60 * 24)) / (60 * 60)))
+        setMins(Math.floor((totalCnt % (60 * 60 )) / (60)))
+        setSecs(Math.floor((totalCnt % (60 ))))
+      }, 1000);
 
-  const [totalCnt,setCnt] = useState(newYearTimeSec - currentTimeSec)
-
-  const[days,setDays] = useState(Math.floor(totalCnt/(60*60*24)))
-  const[hours,setHours] = useState(Math.floor((totalCnt % (60 * 60 * 24)) / (60 * 60)))
-  const[minutes,setMins] = useState(Math.floor((totalCnt % (60 * 60 )) / (60)))
-  const[seconds,setSecs] = useState(Math.floor((totalCnt % (60 ))))
-  
-
-  function DayCal(totalCnt){
-    setDays(Math.floor(totalCnt/(60*60*24)))
-    //console.log(days)
-  }
-  function HourCal(totalCnt){
-    setHours(Math.floor((totalCnt % (60 * 60 * 24)) / (60 * 60)))
-    //console.log(hours)
-  }
-
-  function MinCal(totalCnt){
-    setMins(Math.floor((totalCnt % (60 * 60 )) / (60)))
-    //console.log(minutes)
-  }
-  function SecCal(totalCnt){
-    setSecs(Math.floor((totalCnt % (60 ))))
-    //console.log(minutes)
-  }
-
-  function CountDown(){
-    currentTime = new Date();
-    currentTimeSec = parseInt(currentTime.getTime()/1000)
-    setCnt(newYearTimeSec - currentTimeSec)
-  }
-
-  setInterval(CountDown,1000)
+      // eslint-disable-next-line consistent-return
+      return () => clearTimeout(tick);
+  }, [totalCnt]);
 
   return (
-    <div className="App">
+  <div className="App">
       <div className="clock-container">
         <div className="clock-col">
-          <p className="clock-day clock-timer">{days}
+          <p className="day-Time">{Days}
           </p>
           <p className="clock-label">
             Day
           </p>
         </div>
-        <div className="clock-col">{hours}
-          <p className="clock-hours clock-timer">
+        <div className="clock-col">
+          <p className="hour-Time">{Hours}
           </p>
           <p className="clock-label">
             Hours
           </p>
         </div>
         <div className="clock-col">
-          <p className="clock-minutes clock-timer">{minutes}
+          <p className="min-Time">{Mins}
           </p>
           <p className="clock-label">
             Minutes
           </p>
         </div>
         <div className="clock-col">
-          <p className="clock-seconds clock-timer">{seconds}
+          <p className="sec-Time">{Secs}
           </p>
           <p className="clock-label">
             Seconds
@@ -78,7 +70,7 @@ function App() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 export default App;

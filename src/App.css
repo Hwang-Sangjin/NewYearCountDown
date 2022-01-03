@@ -78,3 +78,15 @@ body {
     display: none !important;
   }
 }
+.day-Time {
+  color: white
+}
+.hour-Time {
+  color: white
+}
+.min-Time {
+  color: white
+}
+.sec-Time {
+  color: white
+}
