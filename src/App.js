@@ -1,7 +1,7 @@
 import './App.css';
 import { useState, useEffect } from "react";
 
-function App() {
+function App() {  
   var currentTime = new Date();
 
   var newYear = currentTime.getUTCFullYear()+1;
@@ -11,7 +11,31 @@ function App() {
   var newYearTimeSec = parseInt(newYearDate.getTime()/1000);
 
 
-  const [cnt,setCnt] = useState(newYearTimeSec - currentTimeSec)
+  const [totalCnt,setCnt] = useState(newYearTimeSec - currentTimeSec)
+
+  const[days,setDays] = useState(Math.floor(totalCnt/(60*60*24)))
+  const[hours,setHours] = useState(Math.floor((totalCnt % (60 * 60 * 24)) / (60 * 60)))
+  const[minutes,setMins] = useState(Math.floor((totalCnt % (60 * 60 )) / (60)))
+  const[seconds,setSecs] = useState(Math.floor((totalCnt % (60 ))))
+  
+
+  function DayCal(totalCnt){
+    setDays(Math.floor(totalCnt/(60*60*24)))
+    //console.log(days)
+  }
+  function HourCal(totalCnt){
+    setHours(Math.floor((totalCnt % (60 * 60 * 24)) / (60 * 60)))
+    //console.log(hours)
+  }
+
+  function MinCal(totalCnt){
+    setMins(Math.floor((totalCnt % (60 * 60 )) / (60)))
+    //console.log(minutes)
+  }
+  function SecCal(totalCnt){
+    setSecs(Math.floor((totalCnt % (60 ))))
+    //console.log(minutes)
+  }
 
   function CountDown(){
     currentTime = new Date();
@@ -23,7 +47,36 @@ function App() {
 
   return (
     <div className="App">
-      <h1>{cnt}</h1>
+      <div className="clock-container">
+        <div className="clock-col">
+          <p className="clock-day clock-timer">{days}
+          </p>
+          <p className="clock-label">
+            Day
+          </p>
+        </div>
+        <div className="clock-col">{hours}
+          <p className="clock-hours clock-timer">
+          </p>
+          <p className="clock-label">
+            Hours
+          </p>
+        </div>
+        <div className="clock-col">
+          <p className="clock-minutes clock-timer">{minutes}
+          </p>
+          <p className="clock-label">
+            Minutes
+          </p>
+        </div>
+        <div className="clock-col">
+          <p className="clock-seconds clock-timer">{seconds}
+          </p>
+          <p className="clock-label">
+            Seconds
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
