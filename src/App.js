@@ -1,5 +1,6 @@
 import './App.css';
 import { useState, useEffect, useRef} from "react";
+import { Fireworks } from 'fireworks-js'
 
 let currentTime
 let newYear
@@ -37,6 +38,8 @@ function App() {
       return () => clearTimeout(tick);
   }, [totalCnt]);
 
+  
+
   return (
   <div className="App">
       <div className="clock-container">
@@ -69,6 +72,8 @@ function App() {
           </p>
         </div>
       </div>
+      <div class="fireworks-example"></div>
+      <button onClick className='fire-work'>Push</button>
     </div>
   )
 }
