@@ -1,6 +1,6 @@
 import './App.css';
 import { useState, useEffect, useRef} from "react";
-import { Fireworks } from 'fireworks-js'
+import { Fireworks, useFireworks } from 'fireworks-js/dist/react'
 
 let currentTime
 let newYear
@@ -32,13 +32,62 @@ function App() {
         setHours(Math.floor((totalCnt % (60 * 60 * 24)) / (60 * 60)))
         setMins(Math.floor((totalCnt % (60 * 60 )) / (60)))
         setSecs(Math.floor((totalCnt % (60 ))))
+        if(Secs===2){
+          setEnabled(true)
+        }
       }, 1000);
 
       // eslint-disable-next-line consistent-return
       return () => clearTimeout(tick);
   }, [totalCnt]);
 
-  
+  const { enabled, options, setEnabled } = useFireworks({
+    initialStart: false,
+    initialOptions: {
+      hue: {
+        min: 0,
+        max: 345
+      },
+      delay: {
+        min: 12,
+        max: 12
+      },
+      rocketsPoint: 50,
+      speed: 10,
+      acceleration: 1.2,
+      friction: 0.96,
+      gravity: 1,
+      particles: 90,
+      trace: 3,
+      explosion: 10,
+      autoresize: true,
+      brightness: {
+        min: 50,
+        max: 80,
+        decay: {
+          min: 0.015,
+          max: 0.03
+        }
+      },
+      boundaries: {
+        visible: false
+      },
+      mouse: {
+        click: true,
+        move: false,
+        max: 1
+      }
+    }
+  })
+
+  const style = {
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    position: 'fixed',
+  }
+
 
   return (
   <div className="App">
@@ -72,8 +121,13 @@ function App() {
           </p>
         </div>
       </div>
-      <div class="fireworks-example"></div>
-      <button onClick className='fire-work'>Push</button>
+      <Fireworks
+        style={style}
+        enabled={enabled}
+        options={options}
+      >
+      </Fireworks>
+      
     </div>
   )
 }
